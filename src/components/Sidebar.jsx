@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { NavLink } from 'react-router-dom'
 const Sidebar = () => {
     return (
         <>
@@ -10,15 +10,28 @@ const Sidebar = () => {
                 <ul className="nav flex-column">
 
                     <li className="nav-item mb-2 py-2">
-                        <a href="#" className="nav-link text-white">
+
+                        <NavLink
+                            to="/"
+                            className={({ isActive, isPending }) =>
+                                isPending ? "pending" : isActive ? "active" : "", "text-white nav-link"
+                            }
+                        >
                             <i className="bi bi-house"></i> Dashboard
-                        </a>
+                        </NavLink>
+
                     </li>
 
                     <li className="nav-item mb-2 py-2">
-                        <a href="#" className="nav-link text-white">
-                            <i class="bi bi-journal-bookmark"></i> Leads
-                        </a>
+
+                        <NavLink
+                            to="/emaildashboard"
+                            className={({ isActive, isPending }) =>
+                                isPending ? "pending" : isActive ? "active" : "", "text-white nav-link"
+                            }
+                        >
+                            <i class="bi bi-journal-bookmark"></i> AI Email
+                        </NavLink>
                     </li>
 
                     <li className="nav-item mb-2 py-2">

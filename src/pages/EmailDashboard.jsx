@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { NavLink } from "react-router-dom";
 
 const API = "http://localhost:3000/getleads";
 
@@ -105,13 +106,23 @@ export default function EmailDashboard() {
                         <p>{lead.email}</p>
                     </div>
                 ))}
+                <NavLink  
+                    to="/"
+                    className={({ isActive, isPending }) =>
+                        isPending ? "pending" : isActive ? "active" : "" , "text-white nav-link"
+                    }
+                >
+                    <h6 className="mt-4 ">Back to Dashboard</h6>
+                </NavLink>
+
+
 
             </div>
 
             {/* RIGHT SIDE - MAIN */}
             <div className="main">
                 <div className="card">
-                    <h2>AI Email Generator</h2>
+                    <h4 className="text-center">AI Email Generator</h4>
 
                     <textarea
                         value={emailText}

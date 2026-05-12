@@ -12,7 +12,7 @@ const Dashboard = () => {
     const getLeads = async () => {
         const res = await axios.get(`${BASEURl}/getleads`);
         setLeads(res.data);
-        toast.success("Leads Fetched successfully");
+        // toast.success("Leads Fetched successfully");
     };
 
     useEffect(() => {
