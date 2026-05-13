@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 
-const baseurl = "http://localhost:3000";
+
+const baseurl = process.env.VITE_BASEURL;
 
 export default function EmailDashboard() {
     const [leads, setLeads] = useState([]);
     const [selectedLead, setSelectedLead] = useState(null);
     const [emailText, setEmailText] = useState("");
 
-    // 🔥 Load leads
+    // Load leads
     useEffect(() => {
         const fetchLeads = async () => {
             const res = await axios.get("http://localhost:3000/getleads");
@@ -19,30 +21,30 @@ export default function EmailDashboard() {
         fetchLeads();
     }, []);
 
-    // 🔥 Generate AI Email
+    // Generate AI Email
     const generateEmail = async (lead) => {
         setSelectedLead(lead);
 
-        const res = await axios.post(`http://localhost:3000/ai-email`, {
+        const res = await axios.post(`${baseurl}/ai-email`, {
             name: lead.name,
         });
 
         setEmailText(res.data.text);
     };
 
-    // 🔥 Send Email
+    // Send Email
     const sendEmail = async () => {
         if (!selectedLead) {
             alert("Select a lead first");
             return;
         }
 
-        await axios.post(`${baseurl}/ai-email`, {
+        await axios.post(`${baseurl}/sendCustomEmail`, {
             email: selectedLead.email,
             text: emailText,
         });
 
-        alert("Email sent!");
+        toast.success("Email sent successfully !");
     };
 
     // return (
