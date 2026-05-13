@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 
-const API = "http://localhost:3000/getleads";
+const baseurl = "http://localhost:3000";
 
 export default function EmailDashboard() {
     const [leads, setLeads] = useState([]);
@@ -37,7 +37,7 @@ export default function EmailDashboard() {
             return;
         }
 
-        await axios.post(`${API}/send-email`, {
+        await axios.post(`${baseurl}/ai-email`, {
             email: selectedLead.email,
             text: emailText,
         });
@@ -106,16 +106,14 @@ export default function EmailDashboard() {
                         <p>{lead.email}</p>
                     </div>
                 ))}
-                <NavLink  
+                <NavLink
                     to="/"
                     className={({ isActive, isPending }) =>
-                        isPending ? "pending" : isActive ? "active" : "" , "text-white nav-link"
+                        isPending ? "pending" : isActive ? "active" : "", "text-white nav-link"
                     }
                 >
                     <h6 className="mt-4 ">Back to Dashboard</h6>
                 </NavLink>
-
-
 
             </div>
 
