@@ -4,24 +4,24 @@ import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 
 
-const baseurl = process.env.VITE_BASEURL;
+const baseurl = "http://localhost:3000";
 
 export default function EmailDashboard() {
     const [leads, setLeads] = useState([]);
     const [selectedLead, setSelectedLead] = useState(null);
     const [emailText, setEmailText] = useState("");
 
-    // Load leads
+    //  Load leads
     useEffect(() => {
         const fetchLeads = async () => {
-            const res = await axios.get("http://localhost:3000/getleads");
+            const res = await axios.get(`${baseurl}/getleads`);
             setLeads(res.data);
         };
 
         fetchLeads();
     }, []);
 
-    // Generate AI Email
+    //  Generate AI Email
     const generateEmail = async (lead) => {
         setSelectedLead(lead);
 
@@ -32,7 +32,7 @@ export default function EmailDashboard() {
         setEmailText(res.data.text);
     };
 
-    // Send Email
+    //  Send Email
     const sendEmail = async () => {
         if (!selectedLead) {
             alert("Select a lead first");
@@ -130,10 +130,14 @@ export default function EmailDashboard() {
                         placeholder="Generated email will appear here..."
                     />
 
-                    <div className="actions">
+                    <div className="actions d-flex gap-2">
                         <button onClick={sendEmail} className="send-btn">
                             Send Email
                         </button>
+                        {selectedLead && (<button onClick={sendEmail} className="send-btn">
+                            Regenerate Mail
+                        </button>)}
+
                     </div>
                 </div>
             </div>
