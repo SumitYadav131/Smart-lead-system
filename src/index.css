@@ -122,3 +122,9 @@ textarea:focus {
 .send-btn:hover {
   background: #2563eb;
 }
+
+.active-link {
+  background-color: white !important;
+  border-radius: 5px;
+  color:black !important;
+}

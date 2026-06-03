@@ -11,10 +11,11 @@ const Sidebar = () => {
 
                     <li className="nav-item mb-2 py-2">
 
+
                         <NavLink
                             to="/"
-                            className={({ isActive, isPending }) =>
-                                isPending ? "pending" : isActive ? "active" : "", "text-white nav-link"
+                            className={({ isActive }) =>
+                                `nav-link ${isActive ? "active-link" : "text-white"}`
                             }
                         >
                             <i className="bi bi-house"></i> Dashboard
@@ -26,11 +27,11 @@ const Sidebar = () => {
 
                         <NavLink
                             to="/emaildashboard"
-                            className={({ isActive, isPending }) =>
-                                isPending ? "pending" : isActive ? "active" : "", "text-white nav-link"
+                            className={({ isActive }) =>
+                                `nav-link ${isActive ? "active-link" : "text-white"}`
                             }
                         >
-                            <i class="bi bi-journal-bookmark"></i> AI Email
+                            <i className="bi bi-journal-bookmark"></i> AI Email
                         </NavLink>
                     </li>
 

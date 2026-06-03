@@ -56,7 +56,7 @@ const Dashboard = () => {
         }
     };
 
-        const sendFollowupEmail = async (id) => {
+    const sendFollowupEmail = async (id) => {
         try {
             const res = await axios.post(
                 `${BASEURl}/sendfollowup/${id}`
@@ -108,15 +108,6 @@ const Dashboard = () => {
                 <div className="flex-grow-1 p-3">
                     {/* your page content */}
                     <div className="container mt-4">
-
-                        {/* HEADER */}
-                        {/* <div className="text-center mb-4">
-                            <h2>Smart Lead Dashboard</h2>
-                            <p className="text-muted">Manage leads & follow-ups</p>
-                        </div> */}
-
-
-
                         {/* CREATE LEAD CARD */}
                         <div className="card shadow-sm mb-4">
                             <div className="card-body">

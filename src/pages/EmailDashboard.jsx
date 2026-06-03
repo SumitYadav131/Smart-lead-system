@@ -11,6 +11,7 @@ export default function EmailDashboard() {
     const [leads, setLeads] = useState([]);
     const [selectedLead, setSelectedLead] = useState(null);
     const [emailText, setEmailText] = useState("");
+    const [loading, setLoading] = useState(false);
 
     //  Load leads
     useEffect(() => {
@@ -24,13 +25,23 @@ export default function EmailDashboard() {
 
     //  Generate AI Email
     const generateEmail = async (lead) => {
-        setSelectedLead(lead);
 
-        const res = await axios.post(`${baseurl}/ai-email`, {
-            name: lead.name,
-        });
+        try {
+            setSelectedLead(lead);
+            setLoading(true);
+            const res = await axios.post(`${baseurl}/ai-email`, {
+                name: lead.name,
+            });
 
-        setEmailText(res.data.text);
+            setEmailText(res.data.text);
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to generate email");
+        } finally {
+            setLoading(false);
+        }
+
+
     };
 
     //  Send Email
@@ -47,48 +58,6 @@ export default function EmailDashboard() {
 
         toast.success("Email sent successfully !");
     };
-
-    // return (
-    //     <div style={{ display: "flex", height: "100vh" }}>
-
-    //         {/* LEFT SIDE */}
-    //         <div style={{ width: "30%", borderRight: "1px solid #ccc", padding: "10px" }}>
-    //             <h3>Leads</h3>
-
-    //             {leads.map((lead) => (
-    //                 <div
-    //                     key={lead._id}
-    //                     onClick={() => generateEmail(lead)}
-    //                     style={{
-    //                         padding: "10px",
-    //                         borderBottom: "1px solid #eee",
-    //                         cursor: "pointer",
-    //                     }}
-    //                 >
-    //                     {lead.name}
-    //                 </div>
-    //             ))}
-    //         </div>
-
-    //         {/* RIGHT SIDE */}
-    //         <div style={{ width: "70%", padding: "10px" }}>
-    //             <h3>Email</h3>
-
-    //             <textarea
-    //                 value={emailText}
-    //                 onChange={(e) => setEmailText(e.target.value)}
-    //                 style={{ width: "100%", height: "250px" }}
-    //             />
-
-    //             <br />
-
-    //             <button onClick={sendEmail} style={{ marginTop: "10px" }}>
-    //                 Send Email
-    //             </button>
-    //         </div>
-    //     </div>
-
-    // );
 
     return (
         <div className="dashboard">
@@ -128,7 +97,7 @@ export default function EmailDashboard() {
                     <textarea
                         value={emailText}
                         onChange={(e) => setEmailText(e.target.value)}
-                        placeholder="Generated email will appear here..."
+                        placeholder={loading ? `Generating Email for you ...` : "Generated email will appear here..."}
                     />
 
                     <div className="actions d-flex gap-2">
