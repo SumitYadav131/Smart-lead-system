@@ -4,7 +4,8 @@ import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 
 
-const baseurl = "http://localhost:3000";
+// const baseurl = "http://localhost:3000";
+const baseurl = import.meta.env.VITE_BASEURL || "http://localhost:3000";
 
 export default function EmailDashboard() {
     const [leads, setLeads] = useState([]);

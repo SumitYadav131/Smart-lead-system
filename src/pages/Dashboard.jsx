@@ -19,18 +19,7 @@ const Dashboard = () => {
         getLeads();
     }, []);
 
-    // const createLead = async () => {
-    //     if (!name || !email) return toast.error("Enter all fields");
 
-    //     await axios.post("http://localhost:3000/createlead", {
-    //         name,
-    //         email,
-    //     });
-    //     toast.success(res.data.msg);
-    //     setName("");
-    //     setEmail("");
-    //     getLeads();
-    // };
 
     const createLead = async () => {
         try {
@@ -51,19 +40,26 @@ const Dashboard = () => {
     };
 
 
-    // const viewLeads = async (id) => {
-    //     const leadRes = await axios.get(`http://localhost:3000/leads/${id}`);
-    //     const actRes = await axios.get(`http://localhost:3000/activities/${id}`);
 
-    //     setSelectedLead(leadRes.data);
-    //     setActivities(actRes.data);
-    // };
 
 
     const sendEmail = async (id) => {
         try {
             const res = await axios.post(
                 `${BASEURl}/sendEmail/${id}`
+            );
+            // res.data.msg ||
+            toast.success("Followup taken successfully");
+
+        } catch (err) {
+            toast.error(err.response?.data?.error || "Failed to send email");
+        }
+    };
+
+        const sendFollowupEmail = async (id) => {
+        try {
+            const res = await axios.post(
+                `${BASEURl}/sendfollowup/${id}`
             );
             // res.data.msg ||
             toast.success("Followup taken successfully");
@@ -191,7 +187,7 @@ const Dashboard = () => {
                                                 <td className="actionBtns">
                                                     <button
                                                         className="btn btn-success btn-sm"
-                                                        onClick={() => sendEmail(lead._id)}
+                                                        onClick={() => sendFollowupEmail(lead._id)}
                                                     >
                                                         Follow Up
                                                     </button>

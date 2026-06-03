@@ -8,7 +8,7 @@ const Footer = () => {
 
                     <p className="mb-1">© 2026 SmartLead System</p>
 
-                    <small className="text-muted">
+                    <small>
                         Built with MERN • AI Powered CRM
                     </small>
 
