@@ -8,18 +8,21 @@ const Dashboard = () => {
     const [email, setEmail] = useState("");
     const [activities, setActivities] = useState([]);
     const BASEURl = import.meta.env.VITE_BASEURL;
+    const [showModal, setShowModal] = useState(false);
+    const [scheduledDate, setScheduledDate] = useState("");
+    const [subject, setSubject] = useState("Follow Up Regarding Our Services");
+    const [followupText, setFollowupText] = useState("");
+
+
+    useEffect(() => {
+        getLeads();
+    }, []);
 
     const getLeads = async () => {
         const res = await axios.get(`${BASEURl}/getleads`);
         setLeads(res.data);
         // toast.success("Leads Fetched successfully");
     };
-
-    useEffect(() => {
-        getLeads();
-    }, []);
-
-
 
     const createLead = async () => {
         try {
@@ -38,10 +41,6 @@ const Dashboard = () => {
             toast.error(err.response?.data?.error || "Failed");
         }
     };
-
-
-
-
 
     const sendEmail = async (id) => {
         try {
@@ -97,6 +96,39 @@ const Dashboard = () => {
         const actRes = await axios.get(`${BASEURl}/activities/${id}`);
         setSelectedLead(res.data);
         setActivities(actRes.data);
+    };
+
+    const scheduleFollowup = async () => {
+        try {
+            if (!selectedLead) {
+                toast.error("No lead selected");
+                return;
+            }
+            if (!subject || !followupText || !scheduledDate) {
+                toast.error("Please fill in all fields");
+                return;
+            }
+
+            await axios.post(
+                `${BASEURl}/schedule-followup`,
+                {
+                    leadId: selectedLead._id,
+                    subject,
+                    text: followupText,
+                    scheduledFor: scheduledDate,
+                }
+            );
+
+            toast.success("Follow Up Scheduled");
+            setShowModal(false);
+            setSubject("Follow Up Regarding Our Services");
+            setFollowupText("");
+            setScheduledDate("");
+
+        } catch (err) {
+            console.error("Schedule followup error:", err);
+            toast.error(err.response?.data?.error || err.message || "Failed to schedule follow up");
+        }
     };
 
     return (
@@ -196,6 +228,17 @@ const Dashboard = () => {
                                                     >
                                                         View
                                                     </button>
+
+                                                    <button
+                                                        className="btn btn-warning"
+                                                        onClick={async () => {
+                                                            await setSelectedLead(lead);
+                                                            setShowModal(true);
+                                                            // alert(selectedLead);
+                                                        }}
+                                                    >
+                                                        Schedule Follow Up
+                                                    </button>
                                                 </td>
                                             </tr>
                                         ))}
@@ -245,7 +288,81 @@ const Dashboard = () => {
                             </div>
                         )}
 
+                        {/* followup popup */}
+                        {
+                            showModal && (
+                                <div
+                                    className="modal d-block"
+                                    style={{ background: "rgba(0,0,0,.5)" }}
+                                >
+                                    <div className="modal-dialog">
+                                        <div className="modal-content">
 
+                                            <div className="modal-header">
+                                                <h5>Schedule Follow Up</h5>
+
+                                                <button
+                                                    className="btn-close"
+                                                    onClick={() => setShowModal(false)}
+                                                />
+                                            </div>
+
+                                            <div className="modal-body">
+
+                                                <label>Subject</label>
+
+                                                <input
+                                                    className="form-control mb-3"
+                                                    value={subject}
+                                                    onChange={(e) =>
+                                                        setSubject(e.target.value)
+                                                    }
+                                                />
+
+                                                <label>Date & Time</label>
+
+                                                <input
+                                                    type="datetime-local"
+                                                    className="form-control"
+                                                    value={scheduledDate}
+                                                    onChange={(e) =>
+                                                        setScheduledDate(e.target.value)
+                                                    }
+                                                />
+
+                                                <label>Schedule followup text</label>
+                                                <textarea
+                                                    className="form-control"
+                                                    rows={8}
+                                                    value={followupText}
+                                                    onChange={(e) => setFollowupText(e.target.value)}
+                                                />
+
+                                            </div>
+
+                                            <div className="modal-footer">
+
+                                                <button
+                                                    className="btn btn-secondary"
+                                                    onClick={() => setShowModal(false)}
+                                                >
+                                                    Cancel
+                                                </button>
+
+                                                <button
+                                                    className="btn btn-primary"
+                                                    onClick={scheduleFollowup}
+                                                >
+                                                    Schedule
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        }
 
                     </div>
                 </div>
