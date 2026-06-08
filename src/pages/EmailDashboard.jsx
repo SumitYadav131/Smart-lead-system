@@ -104,7 +104,7 @@ export default function EmailDashboard() {
                         <button onClick={sendEmail} className="send-btn">
                             Send Email
                         </button>
-                        {selectedLead && (<button onClick={sendEmail} className="send-btn">
+                        {selectedLead && (<button onClick={() => generateEmail(selectedLead)} className="send-btn">
                             Regenerate Mail
                         </button>)}
 
